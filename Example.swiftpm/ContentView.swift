@@ -13,7 +13,8 @@ struct ContentView: View {
     }
     
     var body: some View {
-        KFAnimatedImage(Bundle.main.url(forResource: "animated-webp-supported", withExtension: "webp"))
+        KFAnimatedImage
+            .url(Bundle.main.url(forResource: "animated-webp-supported", withExtension: "webp"))
             .frame(width: 120, height: 120)
     }
 }
