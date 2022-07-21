@@ -51,7 +51,7 @@ extension KingfisherWrapper where Base: KFCrossPlatformImage {
         
         let duration: TimeInterval
         if let properties = CGImageSourceCopyProperties(imageSource, nil) as? [String: Any],
-           let webPProperties = properties["{WebP}"] as? [String : Any],
+           let webPProperties = properties[kCGImagePropertyWebPDictionary as String] as? [String : Any],
            let frameInfo = webPProperties[kCGImagePropertyWebPFrameInfoArray as String] as? [[String : Double]] {
             duration = frameInfo.compactMap({ $0[kCGImagePropertyWebPDelayTime as String] }).reduce(0, +)
         } else {
