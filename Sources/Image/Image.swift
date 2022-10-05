@@ -49,7 +49,7 @@ extension KingfisherWrapper where Base: KFCrossPlatformImage {
         let cgFrames: [CGImage] = (0..<frameCount).compactMap({ CGImageSourceCreateImageAtIndex(imageSource, $0, nil) })
         let uiFrames: [KFCrossPlatformImage] = cgFrames.map { KFCrossPlatformImage(cgImage: $0, scale: scale, orientation: .up) }
         
-        let duration: TimeInterval
+        var duration: TimeInterval
         if let properties = CGImageSourceCopyProperties(imageSource, nil) as? [String: Any],
            let webPProperties = properties[kCGImagePropertyWebPDictionary as String] as? [String : Any],
            let frameInfo = webPProperties[kCGImagePropertyWebPFrameInfoArray as String] as? [[String : Double]] {
@@ -57,6 +57,11 @@ extension KingfisherWrapper where Base: KFCrossPlatformImage {
         } else {
             duration = 0.1 * TimeInterval(frameCount)
         }
+        // https://developers.google.com/speed/webp/docs/riff_container
+        if duration <= 0.001 {
+            duration = 0.1
+        }
+      
         let image = KFCrossPlatformImage.animatedImage(with: uiFrames, duration: duration)
         image?.kf.imageFrameCount = Int(frameCount)
         image?.kf.animatedWebPImageData = data
